@@ -3,36 +3,15 @@
 #Time:2017年11月7日10:37:54
 #Author: marisn
 #Blog: blog.67cc.cn
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-export PATH
-ulimit -c 0
-rm -rf ssr*
-clear
-echo -e "\033[33m=====================================================================\033[0m"
-echo -e "\033[33m                   一键SS-panel V3_mod_panel搭建脚本                 \033[0m"
-echo -e "\033[33m                                                                     \033[0m"
-echo -e "\033[33m                  本脚本由marisn编写，用于学习与交流！               \033[0m"                                                 
-echo -e "\033[33m                                                                     \033[0m"
-echo -e "\033[33m=====================================================================\033[0m"
-echo
-echo -e "脚本已由阿里云/腾讯云等正规vps测试通过";
-echo
-pass='blog.67cc.cn';
-echo -e "请输入Marisn'blog地址:[\033[32m $pass \033[0m] "
-read inputPass
-if [ "$inputPass" != "$pass" ];then
-    #网址验证
-     echo -e "\033[31m很抱歉,输入错误\033[0m";
-     exit 1;
-fi;
+#Github版
 #一键SS-panel V3_mod_panel搭建 
 function install_ss_panel_mod_v3(){
 	yum -y remove httpd
 	yum install -y unzip zip git
-	wget -c https://git.oschina.net/marisn/ssr_v3/raw/master/lnmp1.3.zip && unzip lnmp1.3.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
+	wget -c https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/lnmp1.3.zip && unzip lnmp1.3.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
 	cd /home/wwwroot/default/
 	rm -rf index.html
-	git clone https://git.oschina.net/marisn/mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/echo-marisn/ss-panel-v3-mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	cp config/.config.php.example config/.config.php
 	chattr -i .user.ini
 	mv .user.ini public
@@ -40,7 +19,7 @@ function install_ss_panel_mod_v3(){
 	chmod -R 777 *
 	chown -R www:www storage
 	chattr +i public/.user.ini
-	wget -N -P  /usr/local/nginx/conf/ http://home.ustc.edu.cn/~mmmwhy/nginx.conf 
+	wget -N -P  /usr/local/nginx/conf/ https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/nginx.conf 
 	service nginx restart
 	mysql -uroot -proot -e"create database sspanel;" 
 	mysql -uroot -proot -e"use sspanel;" 
@@ -76,7 +55,7 @@ function install_ss_panel_mod_v3(){
 	mv /home/wwwroot/default/phpmyadmin/ /home/wwwroot/default/public/
 	cd /home/wwwroot/default/public/phpmyadmin
 	chmod -R 755 *
-	wget -N -P  /usr/local/php/etc/ https://gitee.com/marisn/ssr_v3/raw/master/php.ini
+	wget -N -P  /usr/local/php/etc/ hhttps://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/php.ini
 	lnmp restart
 	IPAddress=`wget http://members.3322.org/dyndns/getip -O - -q ; echo`;
 	echo "#############################################################"
@@ -99,7 +78,7 @@ function install_centos_ssr(){
 	chmod 0644 /var/swap
 	swapon /var/swap
 	echo '/var/swap   swap   swap   default 0 0' >> /etc/fstab
-	wget http://git.oschina.net/marisn/ssr_v3/raw/master/libsodium-1.0.13.tar.gz
+	wget https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/libsodium-1.0.13.tar.gz
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
@@ -117,54 +96,9 @@ function install_centos_ssr(){
 	cp apiconfig.py userapiconfig.py
 	cp config.json user-config.json
 }
-function install_ubuntu_ssr(){
-	apt-get update -y
-	apt-get install supervisor lsof -y
-	apt-get install build-essential wget -y
-	apt-get install iptables git -y
-	wget http://git.oschina.net/marisn/ssr_v3/raw/master/libsodium-1.0.13.tar.gz
-	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
-	./configure && make -j2 && make install
-	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
-	ldconfig
-	apt-get install python-pip git -y
-	pip install cymysql
-	cd /root
-	git clone -b manyuser https://github.com/glzjin/shadowsocks.git "/root/shadowsocks"
-	cd shadowsocks
-	pip install -r requirements.txt
-	chmod +x *.sh
-	cp apiconfig.py userapiconfig.py
-	cp config.json user-config.json
-}
 function install_node(){
 	clear
-	check_sys(){
-		if [[ -f /etc/redhat-release ]]; then
-			release="centos"
-		elif cat /etc/issue | grep -q -E -i "debian"; then
-			release="debian"
-		elif cat /etc/issue | grep -q -E -i "ubuntu"; then
-			release="ubuntu"
-		elif cat /etc/issue | grep -q -E -i "centos|red hat|redhat"; then
-			release="centos"
-		elif cat /proc/version | grep -q -E -i "debian"; then
-			release="debian"
-		elif cat /proc/version | grep -q -E -i "ubuntu"; then
-			release="ubuntu"
-		elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
-			release="centos"
-	    fi
-		bit=`uname -m`
-	}
-	install_ssr_for_each(){
-		check_sys
-		if [[ ${release} = "centos" ]]; then
-			install_centos_ssr
-		else
-			install_ubuntu_ssr
-		fi
-	}
+    install_centos_ssr
 	# 取消文件数量限制
 	sed -i '$a * hard nofile 512000\n* soft nofile 512000' /etc/security/limits.conf
 	read -p "请输入你的对接域名或IP(请加上http:// 如果是本机请直接回车): " Userdomain
@@ -225,6 +159,28 @@ function install_BBR(){
 function install_RS(){
      wget -N --no-check-certificate https://github.com/91yun/serverspeeder/raw/master/serverspeeder.sh && bash serverspeeder.sh
 }
+PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+export PATH
+ulimit -c 0
+rm -rf ssr*
+clear
+echo -e "\033[33m=====================================================================\033[0m"
+echo -e "\033[33m                   一键SS-panel V3_mod_panel搭建脚本                 \033[0m"
+echo -e "\033[33m                                                                     \033[0m"
+echo -e "\033[33m                  本脚本由marisn编写，用于学习与交流！               \033[0m"                                                 
+echo -e "\033[33m                                                                     \033[0m"
+echo -e "\033[33m=====================================================================\033[0m"
+echo
+echo -e "脚本已由阿里云/腾讯云等正规vps测试通过";
+echo
+pass='blog.67cc.cn';
+echo -e "请输入Marisn'blog地址:[\033[32m $pass \033[0m] "
+read inputPass
+if [ "$inputPass" != "$pass" ];then
+    #网址验证
+     echo -e "\033[31m很抱歉,输入错误\033[0m";
+     exit 1;
+fi;
 echo -e "\033[31m#############################################################\033[0m"
 echo -e "\033[32m#欢迎使用一键SS-panel V3_mod_panel搭建脚本 and 节点添加     #\033[0m"
 echo -e "\033[34m#Blog: http://blog.67cc.cn/                                 #\033[0m"
