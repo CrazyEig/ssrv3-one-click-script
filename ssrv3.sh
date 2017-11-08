@@ -173,7 +173,9 @@ echo -e "\033[33m===============================================================
 echo
 echo -e "脚本已由阿里云/腾讯云等正规vps测试通过";
 echo
+Realip=`curl -s http://tools.67cc.cn/Realip/ip.php`;
 pass='blog.67cc.cn';
+echo -e "你的IP地址是: $Realip " #检查IP
 echo -e "请输入Marisn'blog地址:[\033[32m $pass \033[0m] "
 read inputPass
 if [ "$inputPass" != "$pass" ];then
