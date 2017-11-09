@@ -10,7 +10,7 @@ function install_ss_panel_mod_v3(){
 	wget -c https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/lnmp1.3.zip && unzip lnmp1.3.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
 	cd /home/wwwroot/default/
 	rm -rf index.html
-	git clone -b mstheme https://github.com/glzjin/shadowsocks.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone -b mstheme https://github.com/izhangxm/ss-panel-v3-mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	# git init
 	# git remote add izhangxm https://github.com/izhangxm/ss-panel-v3-mod.git 
 	# git fetch izhangxm
