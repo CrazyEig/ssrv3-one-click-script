@@ -10,10 +10,11 @@ function install_ss_panel_mod_v3(){
 	wget -c https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/lnmp1.3.zip && unzip lnmp1.3.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
 	cd /home/wwwroot/default/
 	rm -rf index.html
-	git init
-	git remote add izhangxm https://github.com/izhangxm/ss-panel-v3-mod.git 
-	git fetch izhangxm
-	git checkout -b mstheme --track izhangxm/mstheme
+	git clone -b mstheme https://github.com/glzjin/shadowsocks.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	# git init
+	# git remote add izhangxm https://github.com/izhangxm/ss-panel-v3-mod.git 
+	# git fetch izhangxm
+	# git checkout -b mstheme --track izhangxm/mstheme
     wget -N -P /home/wwwroot/default/config/ https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/.config.php
 	wget -N -P /home/wwwroot/default/sql/ https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/sspanel.sql
 	wget -N -P /home/wwwroot/default/public/ https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/favicon.ico
@@ -127,8 +128,8 @@ function install_node(){
 	#iptables
 	iptables -F
 	iptables -X  
-	iptables -I INPUT -p tcp -m tcp --dport 22:65535 -j ACCEPT
-	iptables -I INPUT -p udp -m udp --dport 22:65535 -j ACCEPT
+	iptables -I INPUT -p tcp -m tcp --dport 1:65535 -j ACCEPT
+	iptables -I INPUT -p udp -m udp --dport 1:65535 -j ACCEPT
 	iptables-save >/etc/sysconfig/iptables
 	echo 'iptables-restore /etc/sysconfig/iptables' >> /etc/rc.local
 	echo "/usr/bin/supervisord -c /etc/supervisord.conf" >> /etc/rc.local
