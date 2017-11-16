@@ -55,7 +55,7 @@ function install_ss_panel_mod_v3(){
 	mv /home/wwwroot/default/phpmyadmin/ /home/wwwroot/default/public/
 	cd /home/wwwroot/default/public/phpmyadmin
 	chmod -R 755 *
-	wget -N -P  /usr/local/php/etc/ hhttps://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/php.ini
+	wget -N -P  /usr/local/php/etc/ https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/php.ini
 	lnmp restart
 	IPAddress=`wget http://members.3322.org/dyndns/getip -O - -q ; echo`;
 	echo "#############################################################"
