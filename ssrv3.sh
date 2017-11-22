@@ -8,10 +8,10 @@
 function install_ss_panel_mod_v3(){
 	yum -y remove httpd
 	yum install -y unzip zip git
-	wget -c https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/lnmp1.3.zip && unzip lnmp1.3.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
+	wget -c https://raw.githubusercontent.com/shizhenying/ssrv3-one-click-script/master/lnmp1.3.zip && unzip lnmp1.3.zip && cd lnmp1.3 && chmod +x install.sh && ./install.sh lnmp
 	cd /home/wwwroot/default/
 	rm -rf index.html
-	git clone https://github.com/echo-marisn/ss-panel-v3-mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+	git clone https://github.com/shizhenying/ss-panel-v3-mod.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 	cp config/.config.php.example config/.config.php
 	chattr -i .user.ini
 	mv .user.ini public
@@ -55,7 +55,7 @@ function install_ss_panel_mod_v3(){
 	mv /home/wwwroot/default/phpmyadmin/ /home/wwwroot/default/public/
 	cd /home/wwwroot/default/public/phpmyadmin
 	chmod -R 755 *
-	wget -N -P  /usr/local/php/etc/ https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/php.ini
+	wget -N -P  /usr/local/php/etc/ https://raw.githubusercontent.com/shizhenying/ssrv3-one-click-script/master/php.ini
 	lnmp restart
 	IPAddress=`wget http://members.3322.org/dyndns/getip -O - -q ; echo`;
 	echo "#############################################################"
@@ -78,7 +78,7 @@ function install_centos_ssr(){
 	chmod 0644 /var/swap
 	swapon /var/swap
 	echo '/var/swap   swap   swap   default 0 0' >> /etc/fstab
-	wget https://raw.githubusercontent.com/echo-marisn/ssrv3-one-click-script/master/libsodium-1.0.13.tar.gz
+	wget https://raw.githubusercontent.com/shizhenying/ssrv3-one-click-script/master/libsodium-1.0.13.tar.gz
 	tar xf libsodium-1.0.13.tar.gz && cd libsodium-1.0.13
 	./configure && make -j2 && make install
 	echo /usr/local/lib > /etc/ld.so.conf.d/usr_local_lib.conf
