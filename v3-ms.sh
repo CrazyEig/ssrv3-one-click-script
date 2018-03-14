@@ -329,7 +329,7 @@ pass='blog.67cc.cn';
 echo -e "你的IP地址是: $Realip " #检查IP
 echo -e "请输入Marisn'blog地址:[\033[32m $pass \033[0m] "
 read inputPass
-if [ "$inputPass" != "$pass" ];then
+if [ "$inputPass" == "$pass" ];then
     #网址验证
      echo -e "\033[31m很抱歉,输入错误\033[0m";
      exit 1;
